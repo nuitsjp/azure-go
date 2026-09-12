@@ -30,7 +30,7 @@ Foundryリソースとプロジェクトの作成そのものは、このライ�
 | `sdk/resourcemanager/cognitiveservices/armcognitiveservices/v3` | `v3.0.0` | Foundry／OpenAIアカウントとデプロイ |
 
 今回の操作に対応する公開版を固定しています。各モジュールの最新版であるという主張ではありません。
-間接依存は初回の `go mod tidy` で解決し、生成した `go.mod`／`go.sum` を管理してください。
+間接依存のバージョンとモジュールのチェックサムは `go.mod`／`go.sum` に記録されています。
 
 - [armsubscriptions v1.3.0 API](https://pkg.go.dev/github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/resources/armsubscriptions@v1.3.0)
 - [armresources v1.2.0 API](https://pkg.go.dev/github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/resources/armresources@v1.2.0)

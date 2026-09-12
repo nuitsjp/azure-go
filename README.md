@@ -58,9 +58,12 @@ Windowsで実行する場合はWindows側のAzure CLIを、WSLで実行する場
 | `mise run build` | 全パッケージとサンプルのビルド |
 | `mise run check` | 静的解析・テスト・ビルドをまとめて実行 |
 
+依存関係は `go.mod` の固定バージョンを基準にし、`go.mod` と `go.sum` をバージョン管理しています。
+`mise run tidy` は依存変更に伴う両ファイルの更新に使用します。
+
 ## 最初の起動
 
-ZIPを展開した `azurego` ディレクトリで実行します。以下はWindowsのターミナルでもUbuntuでも同じです。
+リポジトリのルートで実行します。以下はWindowsのターミナルでもUbuntuでも同じです。
 
 ```console
 go mod tidy
@@ -74,9 +77,6 @@ go run ./examples/discover
 
 `-race` には対応プラットフォームとCコンパイラが必要です。利用できない環境では
 まず `go test ./...` を実行し、CIの対応環境で `-race` を実施してください。
-
-依存関係を変更した場合は、`mise run tidy` が更新した `go.sum` と `go.mod` をコミットしてください。
-パッケージを `latest` で取得するのではなく、`go.mod` に固定した直接依存を基準に解決します。
 
 テナントを指定してSubscriptionを確認する例:
 
@@ -214,7 +214,7 @@ if errors.As(err, &responseError) {
 
 公開するデータ型はSDKモデルの型エイリアスです。SDKのResponse、Pager、Pollerは通常の戻り値に出しませんが、
 モデルのポインタ型フィールド・JSON構造・SDKバージョンへの依存は残します。独自DTOを増やさないための意図的な設計です。
-SDKメジャーバージョンの変更時は公開モデルへの影響も確認してください。
+SDKのメジャーバージョン更新は、このライブラリの公開型にも影響する場合があります。
 
 `Options.Credential` と `Options.ARMOptions` により、テスト用の認証情報・HTTPトランスポートを注入できます。
 呼び出し元が別の認証を必要とする場合にも利用できますが、その権限やテナント選択は呼び出し元の責任です。
@@ -223,7 +223,7 @@ SDKメジャーバージョンの変更時は公開モデルへの影響も確�
 ## リポジトリ
 
 ```text
-azurego/
+azure-go/
 ├─ azurego.go / options.go / doc.go
 ├─ account/                    # Subscription・リージョン参照
 ├─ group/                      # Resource Group参照
@@ -240,16 +240,14 @@ azurego/
 ```
 
 小さいため、Cognitive Services配下は同一Goパッケージ内でファイルを分けています。
-公開APIの階層はCLIに合わせますが、メソッドごとにパッケージやService／Repository層は追加しません。
+公開APIの階層はAzure CLIに対応し、メソッドごとのパッケージやService／Repository層はありません。
 
-Module pathは公開先の仮設定として `github.com/nuitsjp/azurego` にしています。
-このZIPの作成ではGitHub上のリポジトリ作成・公開は行っていません。
-別の公開先を使用するときは `go.mod` のmodule行とGoソースの同プレフィックスのimportを一括変更してください。
-公開前に別のローカルプロジェクトから参照するときは、呼び出し側で次のように指定できます。
+現在のGo module pathは `github.com/nuitsjp/azurego` で、GitHubリポジトリのパス `github.com/nuitsjp/azure-go` とは一致していません。
+別のローカルプロジェクトから参照する場合は、呼び出し側で次のように `replace` を指定します。
 
 ```console
 go mod edit -require=github.com/nuitsjp/azurego@v0.0.0
-go mod edit -replace=github.com/nuitsjp/azurego=../azurego
+go mod edit -replace=github.com/nuitsjp/azurego=../azure-go
 go mod tidy
 ```
 
