@@ -46,8 +46,14 @@ Windowsで実行する場合はWindows側のAzure CLIを、WSLで実行する場
 
 ## 開発タスク
 
-[mise](https://mise.jdx.dev/tasks/toml-tasks.html)をタスクランナーとして使用します。Goは別途、PATHから実行できるようにしてください。
-リポジトリのルートで初回に `mise trust` と `mise run tidy` を実行します。
+[mise](https://mise.jdx.dev/tasks/toml-tasks.html)をタスクランナーとして使用し、開発用のGo 1.26.8も `mise.toml` で指定しています。
+リポジトリのルートで初回に次を実行します。
+
+```console
+mise trust
+mise install
+mise run tidy
+```
 
 | コマンド | 内容 |
 |---|---|

@@ -1,9 +1,18 @@
 # 検証記録
 
+## 2026-09-13: Goバージョン設定後の再検証
+
+`mise.toml` の `[tools]` にGo 1.26.8を指定しました。
+Windows / mise 2026.8.6で、`MISE_GO_VERSION` が未設定の状態からGo 1.26.8が選択されることを確認しました。
+`mise build`、`mise tidy`、`mise run fmt`、`mise vet`、`mise test`、`mise check` はすべて終了コード0でした。
+テスト結果にはGoのテストキャッシュが使用されています。Goソースと依存ファイルに変更はありません。
+race detector、GitHub Actions、実Azureへの接続は今回も検証していません。
+
 ## 2026-09-13: miseタスクの検証
 
 Windows / Go 1.26.8 / mise 2026.8.6で、`mise run tidy`、`mise run fmt`、
 `mise run check`（`go vet ./...`、`go test ./...`、`go build ./...`）が成功しました。
+この時点では検証時に `MISE_GO_VERSION=1.26.8` を指定しており、環境変数なしでのタスク実行は未確認でした。
 依存関係を取得し、生成された `go.sum` と更新された `go.mod` を追加しています。
 race detector、GitHub Actions、実Azureへの接続は今回の検証では実行していません。
 

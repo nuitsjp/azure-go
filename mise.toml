@@ -1,3 +1,6 @@
+[tools]
+go = "1.26.8"
+
 [tasks.tidy]
 description = "Goモジュールの依存関係を整理"
 run = "go mod tidy"
