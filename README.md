@@ -242,6 +242,6 @@ go mod edit -replace=github.com/nuitsjp/azurego=../azurego
 go mod tidy
 ```
 
-ライセンスはMITの初期設定です。運用方針に合わせて公開前に確認してください。
+本プロジェクトは[MITライセンス](LICENSE)の下で公開されています。
 
 詳細: [アーキテクチャ](docs/architecture.md) / [公式資料](docs/references.md) / [検証記録](docs/verification.md)
