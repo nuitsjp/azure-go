@@ -1,0 +1,23 @@
+[tasks.tidy]
+description = "Goモジュールの依存関係を整理"
+run = "go mod tidy"
+
+[tasks.fmt]
+description = "Goソースを整形"
+run = "gofmt -w ."
+
+[tasks.vet]
+description = "静的解析を実行"
+run = "go vet ./..."
+
+[tasks.test]
+description = "Azureへ接続せずにテストを実行"
+run = "go test ./..."
+
+[tasks.build]
+description = "全パッケージとサンプルをビルド"
+run = "go build ./..."
+
+[tasks.check]
+description = "静的解析・テスト・ビルドを実行"
+depends = ["vet", "test", "build"]

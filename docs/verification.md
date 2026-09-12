@@ -1,5 +1,14 @@
 # 検証記録
 
+## 2026-09-13: miseタスクの検証
+
+Windows / Go 1.26.8 / mise 2026.8.6で、`mise run tidy`、`mise run fmt`、
+`mise run check`（`go vet ./...`、`go test ./...`、`go build ./...`）が成功しました。
+依存関係を取得し、生成された `go.sum` と更新された `go.mod` を追加しています。
+race detector、GitHub Actions、実Azureへの接続は今回の検証では実行していません。
+
+以下は初期作成時点の記録です。
+
 作成日: 2026-09-12
 
 ## 結論

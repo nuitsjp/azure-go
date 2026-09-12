@@ -4,10 +4,8 @@ Azure CLIに近い命名で、公式Azure SDK for Goを利用する小さな管�
 認証だけ `AzureCLICredential` に委譲し、リソース操作はGoからAzure Resource Manager（ARM）へ直接送信します。
 PowerShellの呼び出し、操作コマンドのラップ、独自のOAuthアプリ登録は行いません。
 
-> **初期実装の検証状態**: Goの構文検査とSDKに依存しない内部テストは実行済みです。
-> 作成環境のネットワーク制約によりAzure SDKの依存パッケージを取得できず、
-> **ライブラリ全体のビルド・SDKを含むテスト・実Azureでの検証は未実施**です。
-> 最初に下記の `go mod tidy` とテストを実行してください。詳細は [検証記録](docs/verification.md) に記載しています。
+> **検証状態**: Windows / Go 1.26.8で `mise run check`（静的解析・全体テスト・ビルド）は成功しています。
+> 実Azureでの検証は未実施です。詳細は [検証記録](docs/verification.md) に記載しています。
 
 ## 対象
 
@@ -46,6 +44,20 @@ Hub／Azure Machine Learningワークスペース配下のデプロイ、モデ�
 Windowsで実行する場合はWindows側のAzure CLIを、WSLで実行する場合はWSL側のAzure CLIを準備します。
 標準構成はAzure Public Cloudです。他のクラウドは個別に構成・確認してください。
 
+## 開発タスク
+
+[mise](https://mise.jdx.dev/tasks/toml-tasks.html)をタスクランナーとして使用します。Goは別途、PATHから実行できるようにしてください。
+リポジトリのルートで初回に `mise trust` と `mise run tidy` を実行します。
+
+| コマンド | 内容 |
+|---|---|
+| `mise run tidy` | Goモジュールの依存関係を整理 |
+| `mise run fmt` | Goソースを整形 |
+| `mise run vet` | 静的解析 |
+| `mise run test` | Azureへ接続しないテスト |
+| `mise run build` | 全パッケージとサンプルのビルド |
+| `mise run check` | 静的解析・テスト・ビルドをまとめて実行 |
+
 ## 最初の起動
 
 ZIPを展開した `azurego` ディレクトリで実行します。以下はWindowsのターミナルでもUbuntuでも同じです。
@@ -63,8 +75,7 @@ go run ./examples/discover
 `-race` には対応プラットフォームとCコンパイラが必要です。利用できない環境では
 まず `go test ./...` を実行し、CIの対応環境で `-race` を実施してください。
 
-作成環境で依存取得ができなかったため、初期ZIPには `go.sum` はありません。
-`go mod tidy` が生成した `go.sum` と更新後の `go.mod` を初回コミットに含めてください。
+依存関係を変更した場合は、`mise run tidy` が更新した `go.sum` と `go.mod` をコミットしてください。
 パッケージを `latest` で取得するのではなく、`go.mod` に固定した直接依存を基準に解決します。
 
 テナントを指定してSubscriptionを確認する例:
